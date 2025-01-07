@@ -1,10 +1,11 @@
-from typing import Any, Generator, List
+from typing import Any, Generator
 
 
-def filter_by_currency(list_dicts: list[dict[str, Any]], currency_type: str
-) -> Generator[List[dict[str, Any]], str, None]:
+def filter_by_currency(
+    list_dicts: list[dict[str, Any]], currency_type: str
+) -> Generator[str | dict[str, Any] | None, str, None]:
     """Функция принимает список словарей с транзакциями и возвращает итератор,
-       выдающий поочередно транзакции, соответствующие заданной валюте
+    выдающий поочередно транзакции, соответствующие заданной валюте
     """
 
     filter_transactions = list(filter(lambda x: x["operationAmount"]["currency"]["code"] == currency_type, list_dicts))
@@ -17,30 +18,32 @@ def filter_by_currency(list_dicts: list[dict[str, Any]], currency_type: str
                 yield item
         if filter_transactions == []:
             yield f"Нет операций в валюте '{currency_type}'"
-    return ""
 
 
-def transactions_descriptions(list_dicts: list[dict[str, Any]]) -> Generator[List[dict[str, Any]], str, None]:
+def transactions_descriptions(list_dicts: list[dict[str, Any]]) -> Generator[str | dict[str, Any] | None, str, None]:
     """Функция принимает список словарей с транзакциями и возвращает итератор,
-       выдающий описание каждой операции по очереди
+    выдающий описание каждой операции по очереди
     """
 
     if list_dicts == []:
         yield "Пустой список"
     else:
-        list_descriptions = list(item_list_dicts["description"] for item_list_dicts in list_dicts if item_list_dicts.get("description") is not None)
+        list_descriptions = list(
+            item_list_dicts["description"]
+            for item_list_dicts in list_dicts
+            if item_list_dicts.get("description") is not None
+        )
 
         if list_descriptions != []:
             for item in list_descriptions:
                 yield item
         else:
             yield "Отсутствуют данные о проведенных операциях"
-    return ""
 
 
-def card_number_generator(start: int = 1, stop: int = 1) -> Generator[List[dict[str, Any]], str, None]:
+def card_number_generator(start: int = 1, stop: int = 1) -> Generator[str | dict[str, Any] | None, str, None]:
     """Функция генерирует номера банковских карт в заданном диапазоне
-       в формате 'ХХХХ ХХХХ ХХХХ ХХХХ'
+    в формате 'ХХХХ ХХХХ ХХХХ ХХХХ'
     """
 
     num = 10000000000000000
@@ -61,4 +64,3 @@ def card_number_generator(start: int = 1, stop: int = 1) -> Generator[List[dict[
             yield "Номер карты не может быть меньше или равным '0' и не должен превышать '9999 9999 9999 9999'"
     else:
         yield "Ошибка: некорректный ввод"
-    return ""

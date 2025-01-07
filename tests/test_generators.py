@@ -2,7 +2,7 @@ from typing import Any, Iterator
 
 import pytest
 
-from src.generators import filter_by_currency, transactions_descriptions, card_number_generator
+from src.generators import card_number_generator, filter_by_currency, transactions_descriptions
 
 
 def test_filter_by_currency(list_dicts_with_transactions: list[dict[str, Any]], currency_filter_1: str) -> None:
@@ -42,7 +42,8 @@ def test_filter_by_currency(list_dicts_with_transactions: list[dict[str, Any]], 
     assert next(generator) == expected_result3
 
 
-def test_filter_by_missing_currency(list_dicts_with_transactions: list[dict[str, Any]], currency_filter_2: str) -> None:
+def test_filter_by_missing_currency(list_dicts_with_transactions: list[dict[str, Any]],
+                                    currency_filter_2: str) -> None:
     """Тест, проверяющий, что функция `filter_by_currency` правильно обрабатывает случаи,
     когда транзакции в заданной валюте отсутствуют
     """
@@ -64,7 +65,9 @@ def test_filter_by_currency_zero_list(list_dict_zero_for_test: list, currency_fi
 
 
 def test_transaction_descriptions(list_dicts_with_transactions: list[dict[str, Any]]) -> None:
-    """Тест, проверяющий, что функция `transaction_descriptions` возвращает корректные описания для каждой транзакции"""
+    """Тест, проверяющий, что функция `transaction_descriptions` возвращает корректные
+    описания для каждой транзакции
+    """
 
     generator = transactions_descriptions(list_dicts_with_transactions)
     expected_result1 = "Перевод организации"
@@ -100,19 +103,14 @@ def test_transaction_descriptions_incomplete_data(list_dict_incomplete_data_for_
 
 @pytest.mark.parametrize(
     "start_number, stop_number, expected_value",
-    [
-        (1, 5, [
+    [(1, 5, [
             "0000 0000 0000 0001",
             "0000 0000 0000 0002",
             "0000 0000 0000 0003",
             "0000 0000 0000 0004",
-            "0000 0000 0000 0005",
-            ],
-        ),
+            "0000 0000 0000 0005",],),
         (115, 117, ["0000 0000 0000 0115", "0000 0000 0000 0116", "0000 0000 0000 0117"]),
-        (11111, 11114, ["0000 0000 0001 1111", "0000 0000 0001 1112", "0000 0000 0001 1113", "0000 0000 0001 1114"]),
-    ],
-)
+        (11111, 11114, ["0000 0000 0001 1111", "0000 0000 0001 1112", "0000 0000 0001 1113", "0000 0000 0001 1114"])])
 def test_card_number_generator(start_number: int, stop_number: int, expected_value: Iterator[list[str]]) -> None:
     """Тест, проверяющий, что генератор 'card_number_generator' выдает правильные номера карт в заданном диапазоне"""
 
@@ -120,22 +118,15 @@ def test_card_number_generator(start_number: int, stop_number: int, expected_val
     assert list(generator) == expected_value
 
 
-@pytest.mark.parametrize("start_number, stop_number, expected_value",
-    [
-        (0, 0, ["Номер карты не может быть меньше или равным '0' и не должен превышать '9999 9999 9999 9999'"]),
-        (
-            10000000000000000,
-            10000000000000000,
-            ["Номер карты не может быть меньше или равным '0' и не должен превышать '9999 9999 9999 9999'"],
-        ),
-        (
-            9999999999999999,
-            9999999999999999,
-            ["!!!Доcтигнуто предельное значение номера карты - '9999 9999 9999 9999'!!!"],
-        ),
-    ],
-)
-def test_card_number_generator_limit_values(start_number: int, stop_number: int, expected_value: Iterator[list[str]]) -> None:
+@pytest.mark.parametrize(
+    "start_number, stop_number, expected_value",
+    [(0, 0, ["Номер карты не может быть меньше или равным '0' и не должен превышать '9999 9999 9999 9999'"]),
+        (10000000000000000, 10000000000000000,
+            ["Номер карты не может быть меньше или равным '0' и не должен превышать '9999 9999 9999 9999'"]),
+        (9999999999999999, 9999999999999999,
+            ["!!!Доcтигнуто предельное значение номера карты - '9999 9999 9999 9999'!!!"])])
+def test_card_number_generator_limit_values(start_number: int, stop_number: int,
+                                            expected_value: Iterator[list[str]]) -> None:
     """Тест, проверяющий, что генератор 'card_number_generator' правильно обрабатывает крайние
     значения диапазона и правильно завершает генерацию
     """
