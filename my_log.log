@@ -1,0 +1,2 @@
+my_function error: Cannot divide by zero. Inputs: (2, 0), {} | Time: 0:00:00
+my_function ok | Time: 0:00:00
