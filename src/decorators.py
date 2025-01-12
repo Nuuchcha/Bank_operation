@@ -1,15 +1,15 @@
-import os
-import sys
 from datetime import datetime
 from functools import wraps
+from typing import Any, Callable
 
-def log(filename=None):
-    def decorator(func):
+
+def log(filename: str | None = None) -> Callable[[Any], Any]:
+    def decorator(func: Any) -> Any:
         @wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
             start_time = datetime.now()
             try:
-                result = func(*args, **kwargs)
+                func(*args, **kwargs)
                 log_message = f"{func.__name__} ok"
             except Exception as e:
                 log_message = f"{func.__name__} error: {str(e)}. Inputs: {args}, {kwargs}"
@@ -17,9 +17,11 @@ def log(filename=None):
                 end_time = datetime.now()
                 log_message += f" | Time: {end_time - start_time}"
                 if filename:
-                    with open(filename, 'a') as file:
+                    with open(filename, "a") as file:
                         file.write(log_message + "\n")
                 else:
                     print(log_message)
+
         return wrapper
+
     return decorator

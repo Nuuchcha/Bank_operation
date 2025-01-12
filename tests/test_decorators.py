@@ -1,6 +1,3 @@
-import os.path
-import sys
-
 from src.decorators import log
 
 
@@ -18,7 +15,8 @@ def test_log_division_zero_in_file() -> None:
 
     my_function(2, 0)
     with open('my_log.log', 'r', encoding='utf-8') as f:
-        assert f.readlines()[-1][-77:] == ("my_function error: Cannot divide by zero. Inputs: (2, 0), {} | Time: 0:00:00\n")
+        assert f.readlines()[-1][-77:] == ("my_function error: Cannot divide by zero. "
+                                           "Inputs: (2, 0), {} | Time: 0:00:00\n")
 
 
 def test_log_positive_in_file() -> None:
