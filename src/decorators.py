@@ -5,7 +5,8 @@ from typing import Any, Callable
 
 def log(filename: str | None = None) -> Callable[[Any], Any]:
     """Декоратор, для функций, выводит информацию о положительном выполнении функции, либо об ошибке выполнения
-       в файл .log, если указано имя файла, либо в консоль"""
+    в файл .log, если указано имя файла, либо в консоль"""
+
     def decorator(func: Any) -> Any:
         @wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
