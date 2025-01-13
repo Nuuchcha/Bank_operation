@@ -1,7 +1,7 @@
 from src.decorators import log
 
 
-def test_log_division_zero_in_file() -> None:
+def test_log_division_zero_in_file():
     """Тестирование декоратора на вывод в файл ошибки выполнения функции"""
 
     @log('my_log.log')
@@ -36,7 +36,7 @@ def test_log_positive_in_file() -> None:
         assert f.readlines()[-1][-32:] == ("my_function ok | Time: 0:00:00\n")
 
 
-def test_log_negative_zero_in_console(capsys) -> None:
+def test_log_negative_zero_in_console(capsys):
     """Тестирование декоратора на вывод ошибки выполнения функции в консоль"""
 
     @log()
